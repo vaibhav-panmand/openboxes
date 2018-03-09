@@ -1007,6 +1007,7 @@ class InventoryService implements ApplicationContextAware {
             createAlias('productSuppliers', 'ps', CriteriaSpecification.LEFT_JOIN)
             createAlias('inventoryItems', 'ii', CriteriaSpecification.LEFT_JOIN)
 
+			eq("active", true)
             if(categories) {
                 inList("category", categories)
             }
@@ -2156,7 +2157,10 @@ class InventoryService implements ApplicationContextAware {
 	 * @return
 	 */
 	List getProductsByCategory(Category category) {
-		def products = Product.createCriteria().list() { eq("category", category) }
+		def products = Product.createCriteria().list() {
+            eq("active", true)
+            eq("category", category)
+        }
 		return products;
 	}
 
@@ -2173,7 +2177,10 @@ class InventoryService implements ApplicationContextAware {
 			if (categories) {
 				log.debug("get products by nested category: " + category + " -> " + categories)
 
-				products = Product.createCriteria().list() { 'in'("category", categories) }
+				products = Product.createCriteria().list() {
+                    eq("active", true)
+                    'in'("category", categories)
+                }
 			}
 		}
 		return products;
