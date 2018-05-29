@@ -15,10 +15,22 @@ class RoleFilters {
     def static changeControllers = ['createProductFromTemplate']
 
     def static adminControllers = ['createProduct', 'createProductFromTemplate', 'admin']
-    def static adminActions = ['product': ['create'], 'person': ['list'], 'user': ['list'], 'location': ['edit'], 'shipper': ['create'], 'locationGroup': ['create'], 'locationType': ['create']]
+    def static adminActions = [
+            'product': ['create'],
+            'person': ['list'],
+            'user': ['list'],
+            'location': ['edit'],
+            'shipper': ['create'],
+            'locationGroup': ['create'],
+            'locationType': ['create']
+    ]
 
     def static superuserControllers = []
-    def static superuserActions = ['console':['index','execute'], '*': ['delete']]
+    def static superuserActions = [
+            'console':['index','execute'], '*': ['delete'],
+            'inventory': ['editTransaction', 'deleteTransaction', 'saveTransaction'],
+            'transactionEntry': ['edit', 'delete', 'save', 'update']
+    ]
 
     def filters = {
         readonlyCheck(controller: '*', action: '*') {
@@ -28,7 +40,7 @@ class RoleFilters {
                 if (SecurityFilters.actionsWithAuthUserNotRequired.contains(actionName) || actionName == "chooseLocation" || controllerName == "errors")
                     return true
 
-                // Authorized user s
+                // Authorized users
                 def missBrowser = !userService.canUserBrowse(session.user)
                 def missManager = needManager(controllerName, actionName) && !userService.isUserManager(session.user)
                 def missAdmin = needAdmin(controllerName, actionName) && !userService.isUserAdmin(session.user)
