@@ -93,7 +93,7 @@ const FIELDS = {
       },
       quantityConsumed: {
         type: LabelField,
-        label: 'Monthly stock list quantity',
+        label: 'stockMovement.monthlyQuantity.label',
         flexWidth: '1.35',
         attributes: {
           formatValue: value => (value ? (value.toLocaleString('en-US')) : value),
@@ -146,7 +146,7 @@ const FIELDS = {
       },
       revert: {
         type: ButtonField,
-        label: 'default.button.undo.label  ',
+        label: 'default.button.undo.label',
         flexWidth: '1',
         fieldKey: '',
         buttonLabel: 'default.button.undo.label  ',

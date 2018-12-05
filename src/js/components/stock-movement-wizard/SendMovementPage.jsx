@@ -57,7 +57,7 @@ const SHIPMENT_FIELDS = {
       return { formatValue: fieldValue => _.get(fieldValue, 'name') };
     },
   },
-  'stockList.name': {
+  'stocklist.name': {
     label: 'stockMovement.stocklist.label',
     type: LabelField,
   },
