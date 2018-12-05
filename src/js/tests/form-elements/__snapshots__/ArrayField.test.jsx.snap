@@ -40,7 +40,9 @@ exports[`ArrayField component is correctly rendering with Add button 1`] = `
             "minWidth": 0,
           }
         }
-      />
+      >
+        undefined
+      </div>
     </div>
   </div>
   <div
@@ -297,7 +299,9 @@ exports[`ArrayField component is correctly rendering with no Add button 1`] = `
             "minWidth": 0,
           }
         }
-      />
+      >
+        undefined
+      </div>
     </div>
   </div>
   <div
