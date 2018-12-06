@@ -77,7 +77,11 @@ exports[`ArrayField component is correctly rendering with Add button 1`] = `
               }
             }
             tabIndex={undefined}
-            title={undefined}
+            title={
+              <Translate
+                id={undefined}
+              />
+            }
           >
             <div
               className="form-group mb-0   "
@@ -112,7 +116,11 @@ exports[`ArrayField component is correctly rendering with Add button 1`] = `
               }
             }
             tabIndex={undefined}
-            title={undefined}
+            title={
+              <Translate
+                id={undefined}
+              />
+            }
           >
             <div
               className="form-group mb-0   "
@@ -172,7 +180,11 @@ exports[`ArrayField component is correctly rendering with Add button 1`] = `
               }
             }
             tabIndex={undefined}
-            title={undefined}
+            title={
+              <Translate
+                id={undefined}
+              />
+            }
           >
             <div
               className="form-group mb-0   "
@@ -207,7 +219,11 @@ exports[`ArrayField component is correctly rendering with Add button 1`] = `
               }
             }
             tabIndex={undefined}
-            title={undefined}
+            title={
+              <Translate
+                id={undefined}
+              />
+            }
           >
             <div
               className="form-group mb-0   "
@@ -336,7 +352,11 @@ exports[`ArrayField component is correctly rendering with no Add button 1`] = `
               }
             }
             tabIndex={undefined}
-            title={undefined}
+            title={
+              <Translate
+                id={undefined}
+              />
+            }
           >
             <div
               className="form-group mb-0   "
@@ -371,7 +391,11 @@ exports[`ArrayField component is correctly rendering with no Add button 1`] = `
               }
             }
             tabIndex={undefined}
-            title={undefined}
+            title={
+              <Translate
+                id={undefined}
+              />
+            }
           >
             <div
               className="form-group mb-0   "
@@ -431,7 +455,11 @@ exports[`ArrayField component is correctly rendering with no Add button 1`] = `
               }
             }
             tabIndex={undefined}
-            title={undefined}
+            title={
+              <Translate
+                id={undefined}
+              />
+            }
           >
             <div
               className="form-group mb-0   "
@@ -466,7 +494,11 @@ exports[`ArrayField component is correctly rendering with no Add button 1`] = `
               }
             }
             tabIndex={undefined}
-            title={undefined}
+            title={
+              <Translate
+                id={undefined}
+              />
+            }
           >
             <div
               className="form-group mb-0   "
