@@ -302,6 +302,15 @@ class SendMovementPage extends Component {
     return apiClient.post(url, data);
   }
 
+  saveChanges(values) {
+    this.saveShipment(values)
+      .then(() => {
+        this.props.hideSpinner();
+        Alert.success('Changes saved successfully!');
+      })
+      .catch(() => this.props.hideSpinner());
+  }
+
   /**
    * Saves data with shipment details.
    * @param {object} values
@@ -417,7 +426,7 @@ class SendMovementPage extends Component {
               <hr />
               <button
                 type="button"
-                onClick={() => this.saveShipment(values)}
+                onClick={() => this.saveChanges(values)}
                 className="btn btn-outline-secondary float-right btn-form btn-xs"
                 disabled={invalid || values.statusCode === 'ISSUED'}
               >

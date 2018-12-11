@@ -1,12 +1,12 @@
 /**
-* Copyright (c) 2012 Partners In Health.  All rights reserved.
-* The use and distribution terms for this software are covered by the
-* Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
-* which can be found in the file epl-v10.html at the root of this distribution.
-* By using this software in any fashion, you are agreeing to be bound by
-* the terms of this license.
-* You must not remove this notice, or any other, from this software.
-**/
+ * Copyright (c) 2012 Partners In Health.  All rights reserved.
+ * The use and distribution terms for this software are covered by the
+ * Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
+ * which can be found in the file epl-v10.html at the root of this distribution.
+ * By using this software in any fashion, you are agreeing to be bound by
+ * the terms of this license.
+ * You must not remove this notice, or any other, from this software.
+ **/
 package org.pih.warehouse.inventory
 
 import grails.orm.PagedResultList
@@ -94,10 +94,6 @@ class StockMovementService {
         log.info "Update stock movement " + new JSONObject(stockMovement.toJson()).toString(4)
 
         Requisition requisition = updateRequisition(stockMovement, forceUpdate)
-
-        if (stockMovement.origin.isSupplier()) {
-            stockMovement = StockMovement.createFromRequisition(requisition)
-        }
 
         log.info "Date shipped: " + stockMovement.dateShipped
         if (RequisitionStatus.CHECKING == requisition.status || RequisitionStatus.PICKED == requisition.status || RequisitionStatus.ISSUED == requisition.status) {
@@ -973,11 +969,13 @@ class StockMovementService {
 
         if (stockMovement.origin.isSupplier()) {
             stockMovement.lineItems.collect { StockMovementItem stockMovementItem ->
-                log.info "Create or update item ${stockMovementItem.toJson()}"
-                Container container = createOrUpdateContainer(shipment, stockMovementItem.palletName, stockMovementItem.boxName)
-                ShipmentItem shipmentItem = createOrUpdateShipmentItem(stockMovementItem)
-                shipmentItem.container = container
-                shipment.addToShipmentItems(shipmentItem)
+               if (stockMovementItem.id) {
+                   log.info "Create or update item ${stockMovementItem.toJson()}"
+                   Container container = createOrUpdateContainer(shipment, stockMovementItem.palletName, stockMovementItem.boxName)
+                   ShipmentItem shipmentItem = createOrUpdateShipmentItem(stockMovementItem)
+                   shipmentItem.container = container
+                   shipment.addToShipmentItems(shipmentItem)
+               }
             }
         } else if (stockMovement.packPage?.packPageItems) {
             stockMovement.packPage.packPageItems.each { PackPageItem packPageItem ->
@@ -1005,7 +1003,7 @@ class StockMovementService {
         }
 
         InventoryItem inventoryItem = inventoryService.findOrCreateInventoryItem(stockMovementItem.product,
-                        stockMovementItem.lotNumber, stockMovementItem.expirationDate)
+                stockMovementItem.lotNumber, stockMovementItem.expirationDate)
 
         shipmentItem.requisitionItem = requisitionItem
         shipmentItem.product = stockMovementItem.product
@@ -1068,7 +1066,7 @@ class StockMovementService {
             shipmentItem.quantity = picklistItem?.quantity
             shipmentItem.requisitionItem = picklistItem.requisitionItem
             shipmentItem.recipient = picklistItem?.requisitionItem?.recipient?:
-                picklistItem?.requisitionItem?.parentRequisitionItem?.recipient
+                    picklistItem?.requisitionItem?.parentRequisitionItem?.recipient
             shipmentItem.inventoryItem = picklistItem?.inventoryItem
             shipmentItem.binLocation = picklistItem?.binLocation
 
@@ -1176,14 +1174,14 @@ class StockMovementService {
                             uri         : g.createLink(controller: 'stockMovement', action: "exportCsv", id: stockMovement?.requisition?.id, absolute: true)
                     ],
                     [
-                        name        : g.message(code: "picklist.button.print.label"),
+                            name        : g.message(code: "picklist.button.print.label"),
                             documentType: DocumentGroupCode.PICKLIST.name(),
                             contentType : "text/html",
                             stepNumber  : 4,
                             uri         : g.createLink(controller: 'picklist', action: "print", id: stockMovement?.requisition?.id, absolute: true)
                     ],
                     [
-                        name        : g.message(code: "picklist.button.download.label"),
+                            name        : g.message(code: "picklist.button.download.label"),
                             documentType: DocumentGroupCode.PICKLIST.name(),
                             contentType : "application/pdf",
                             stepNumber  : 4,
