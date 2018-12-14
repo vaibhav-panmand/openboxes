@@ -973,8 +973,12 @@ class StockMovementService {
                    log.info "Create or update item ${stockMovementItem.toJson()}"
                    Container container = createOrUpdateContainer(shipment, stockMovementItem.palletName, stockMovementItem.boxName)
                    ShipmentItem shipmentItem = createOrUpdateShipmentItem(stockMovementItem)
-                   shipmentItem.container = container
-                   shipment.addToShipmentItems(shipmentItem)
+
+                   // If the stock movement item was deleted the shipment item will be null
+                   if (shipmentItem) {
+                       shipmentItem.container = container
+                       shipment.addToShipmentItems(shipmentItem)
+                   }
                }
             }
         } else if (stockMovement.packPage?.packPageItems) {
@@ -995,23 +999,27 @@ class StockMovementService {
     ShipmentItem createOrUpdateShipmentItem(StockMovementItem stockMovementItem) {
 
         // FIXME Determine whether this will ever return multiple (my guess is no)
+        ShipmentItem shipmentItem
         RequisitionItem requisitionItem = RequisitionItem.get(stockMovementItem.id)
-        ShipmentItem shipmentItem = ShipmentItem.findByRequisitionItem(requisitionItem)
+        if (requisitionItem) {
 
-        if(!shipmentItem) {
-            shipmentItem = new ShipmentItem()
+            shipmentItem = ShipmentItem.findByRequisitionItem(requisitionItem)
+
+            if(!shipmentItem) {
+                shipmentItem = new ShipmentItem()
+            }
+
+            InventoryItem inventoryItem = inventoryService.findOrCreateInventoryItem(stockMovementItem.product,
+                    stockMovementItem.lotNumber, stockMovementItem.expirationDate)
+
+            shipmentItem.requisitionItem = requisitionItem
+            shipmentItem.product = stockMovementItem.product
+            shipmentItem.inventoryItem = inventoryItem
+            shipmentItem.lotNumber = inventoryItem.lotNumber
+            shipmentItem.expirationDate = inventoryItem.expirationDate
+            shipmentItem.quantity = stockMovementItem.quantityRequested
+            shipmentItem.recipient = stockMovementItem.recipient
         }
-
-        InventoryItem inventoryItem = inventoryService.findOrCreateInventoryItem(stockMovementItem.product,
-                stockMovementItem.lotNumber, stockMovementItem.expirationDate)
-
-        shipmentItem.requisitionItem = requisitionItem
-        shipmentItem.product = stockMovementItem.product
-        shipmentItem.inventoryItem = inventoryItem
-        shipmentItem.lotNumber = inventoryItem.lotNumber
-        shipmentItem.expirationDate = inventoryItem.expirationDate
-        shipmentItem.quantity = stockMovementItem.quantityRequested
-        shipmentItem.recipient = stockMovementItem.recipient
         return shipmentItem
     }
 
